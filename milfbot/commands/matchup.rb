@@ -1,8 +1,12 @@
+require 'milfbot/command_helpers/matchup_helper'
+
 module Milfbot
   module Commands
-    class Milfbot::Commands::Matchup < SlackRubyBot::Commands::Base
+    class Matchup < SlackRubyBot::Commands::Base
       command 'matchup' do |client, data, match|
-        owner = matched_owner_name(match)
+        helper = Milfbot::CommandHelpers::MatchupHelper.new
+
+        owner = helper.matched_owner_name(match)
         team_id = Constants::ESPN_TEAM_IDS_BY_OWNER[owner]
         url ="http://games.espn.com/ffl/matchuppreview?leagueId=#{Constants::ESPN_LEAGUE_ID}&teamId=#{team_id}"
         page = Nokogiri::HTML(HTTParty.get(url))
@@ -13,17 +17,17 @@ module Milfbot
         team2_name = team2.css('th').first.text
 
         message = []
-        message << "*#{team1_name}: #{projected_total(team1)}*"
+        message << "*#{team1_name}: #{helper.projected_total(team1)}*"
         team1.css('tr').each_with_index.map do |row, index|
-          message << parse_player_projection(row, index)
+          message << helper.parse_player_projection(row, index)
         end
         message << ''
-        message << "*#{team2_name}: #{projected_total(team2)}*"
+        message << "*#{team2_name}: #{helper.projected_total(team2)}*"
         team2.css('tr').each_with_index.map do |row, index|
-          message << parse_player_projection(row, index)
+          message << helper.parse_player_projection(row, index)
         end
         message << ''
-        message << "*Projected Winner: #{projected_winner(team1, team2)}*"
+        message << "*Projected Winner: #{helper.projected_winner(team1, team2)}*"
 
         client.say(text: message.compact.join("\n"), channel: data.channel)
       end

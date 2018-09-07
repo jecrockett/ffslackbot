@@ -7,6 +7,7 @@ gem 'slack-ruby-bot'
 gem 'celluloid-io'
 gem 'nokogiri'
 gem 'httparty'
+gem 'require_all'
 
 group :development, :test do
   gem 'rake'

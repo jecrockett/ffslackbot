@@ -10,7 +10,7 @@ Thread.abort_on_exception = true
 
 Thread.new do
   begin
-    Milfbot::Bot.run
+    Milfbot::App.instance.run
   rescue Exception => e
     STDERR.puts "ERROR: #{e}"
     STDERR.puts e.backtrace
