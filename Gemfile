@@ -8,6 +8,7 @@ gem 'celluloid-io'
 gem 'nokogiri'
 gem 'httparty'
 gem 'require_all'
+gem 'rufus-scheduler'
 
 group :development, :test do
   gem 'rake'
