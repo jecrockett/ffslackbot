@@ -1,5 +1,4 @@
 require 'milfbot/command_helpers/matchup_helper'
-require 'pry'
 
 module Milfbot
   module Commands
