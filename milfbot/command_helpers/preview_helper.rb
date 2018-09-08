@@ -2,7 +2,7 @@ require_relative 'helper_base'
 
 module Milfbot
   module CommandHelpers
-    class MatchupHelper < HelperBase
+    class PreviewHelper < HelperBase
       def parse_player_projection(row, index)
         "#{row.css('a')[0].text} - Proj: #{row.css('td').last.text}" unless index < 2
       end
