@@ -1,5 +1,4 @@
 require 'milfbot/command_helpers/preview_helper'
-require 'pry'
 
 module Milfbot
   module Commands
