@@ -5,7 +5,8 @@ module Milfbot
     class HelperBase
       def matched_owner_name(input)
         Constants::ALIASES.each do |name, aliases|
-          return name if aliases.include?(input.downcase)
+          # checks if any alias is a substring of the input so that "jake's" correctly identifies 'jake'
+          return name if aliases.any? { |a| input.downcase.include?(a) }
         end
       end
     end

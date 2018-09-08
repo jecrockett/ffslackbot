@@ -1,17 +1,17 @@
 source 'https://rubygems.org'
 
-gem 'puma'
-gem 'sinatra'
-gem 'dotenv'
-gem 'slack-ruby-bot'
 gem 'celluloid-io'
-gem 'nokogiri'
+gem 'dotenv'
 gem 'httparty'
+gem 'nokogiri'
+gem 'puma'
 gem 'require_all'
 gem 'rufus-scheduler'
+gem 'sinatra'
+gem 'slack-ruby-bot'
 
 group :development, :test do
-  gem 'rake'
   gem 'foreman'
   gem 'pry'
+  gem 'rake'
 end

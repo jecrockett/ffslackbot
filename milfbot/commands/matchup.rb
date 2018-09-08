@@ -1,12 +1,21 @@
 require 'milfbot/command_helpers/matchup_helper'
+require 'pry'
 
 module Milfbot
   module Commands
     class Matchup < SlackRubyBot::Commands::Base
       command 'matchup' do |client, data, match|
-        helper = Milfbot::CommandHelpers::MatchupHelper.new
+        matchup(client, data, match[:expression])
+      end
 
-        owner = helper.matched_owner_name(match[:expression])
+      match /^(?<name>.*) matchup$/ do |client, data, match|
+        matchup(client, data, match[:name])
+      end
+
+      def self.matchup(client, data, name)
+        helper = Milfbot::CommandHelpers::MatchupHelper.new
+        owner = helper.matched_owner_name(name)
+
         team_id = Constants::ESPN_TEAM_IDS_BY_OWNER[owner]
         url ="http://games.espn.com/ffl/matchuppreview?leagueId=#{Constants::ESPN_LEAGUE_ID}&teamId=#{team_id}"
         page = Nokogiri::HTML(HTTParty.get(url))
