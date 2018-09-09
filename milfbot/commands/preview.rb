@@ -7,6 +7,10 @@ module Milfbot
         preview(client, data, match[:expression], detailed: false)
       end
 
+      command 'detailed preview', 'detailed projection' do |client, data, match|
+        preview(client, data, match[:expression], detailed: true)
+      end
+
       match /^(?<name>.*) detailed preview$/ do |client, data, match|
         preview(client, data, match[:name], detailed: true)
       end

@@ -2,7 +2,11 @@ module Milfbot
   module Commands
     class Matchup < SlackRubyBot::Commands::Base
       command 'matchup', 'score' do |client, data, match|
-        matchup(client, data, match[:expression])
+        matchup(client, data, match[:expression], detailed: false)
+      end
+
+      command 'detailed matchup', 'detailed score' do |client, data, match|
+        matchup(client, data, match[:expression], detailed: true)
       end
 
       match /^(?<name>.*) detailed matchup$/ do |client, data, match|
