@@ -4,7 +4,7 @@ module Milfbot
   module Commands
     class Preview < SlackRubyBot::Commands::Base
       command 'preview', 'projection' do |client, data, match|
-        preview(client, data, match[:expression])
+        preview(client, data, match[:expression], detailed: false)
       end
 
       match /^(?<name>.*) detailed preview$/ do |client, data, match|
