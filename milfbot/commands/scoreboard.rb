@@ -1,5 +1,3 @@
-require 'pry'
-
 module Milfbot
   module Commands
     class Scoreboard < SlackRubyBot::Commands::Base
