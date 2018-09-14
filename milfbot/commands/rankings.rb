@@ -1,3 +1,5 @@
+require 'json'
+
 module Milfbot
   module Commands
     class Rankings < SlackRubyBot::Commands::Base
