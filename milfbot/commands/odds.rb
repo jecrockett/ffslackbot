@@ -1,3 +1,5 @@
+require 'json'
+
 module Milfbot
   module Commands
     class Odds < SlackRubyBot::Commands::Base
