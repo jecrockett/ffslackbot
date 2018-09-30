@@ -52,7 +52,7 @@ def lookup(s,d):
 # Get rosters of teams
 rosters = []
 for i in range(10):
-  url = 'http://games.espn.com/ffl/clubhouse?leagueId=%i&teamId=%i&seasonId=%i' % (c.league,c.ids[i],c.season)
+  url = 'http://games.espn.com/ffl/clubhouse?leagueId=%i&teamId=%i&seasonId=%i' % (c.league,i,c.season)
   tree = html.fromstring(requests.get(url).content)
   roster = tree.xpath('//td[@class="playertablePlayerName"]//a/text()')
   positions = [i.strip()[-2:].strip().lower() if i.strip()[-2:].strip().lower() != 'st' else 'd' for i in tree.xpath('//td[@class="playertablePlayerName"]/text()')]
