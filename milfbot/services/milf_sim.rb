@@ -1,5 +1,3 @@
-require 'tzinfo'
-
 class MilfSim
   def self.simulate_MILF
     #Run python code
