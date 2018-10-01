@@ -8,10 +8,10 @@ module Milfbot
         response = HTTParty.get(url, format: :plain)
         json = JSON.parse(response, symbolize_names: true)
 
-		odds = []
-		json[:owner].flatten().each_with_index do |owner, index|
-			odds << {name: owner, odds: json[:odds].flatten()[index]}
-		end
+	odds = []
+	json[:owner].flatten().each_with_index do |owner, index|
+		odds << {name: owner, odds: json[:odds].flatten()[index]}
+	end
     	odds = odds.sort_by {|h| -h[:odds]}
 
         message = []
