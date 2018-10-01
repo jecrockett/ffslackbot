@@ -9,6 +9,8 @@ gem 'require_all'
 gem 'rufus-scheduler'
 gem 'sinatra'
 gem 'slack-ruby-bot'
+gem 'json'
+gem 'tzinfo'
 
 group :development, :test do
   gem 'foreman'
