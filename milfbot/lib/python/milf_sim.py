@@ -1,36 +1,14 @@
 import requests, numpy as np
-from aliases import aliases
+from constants import leagueID, season, aliases, abbrevs, bye_weeks
 from bs4 import BeautifulSoup
 
-league = 325879
-season = 2018
-
-#Get results from ESPN
-sched = [[] for i in range(13)]
-scores = [[] for i in range(10)]
-wins = [[] for i in range(10)]
-avgs = []
-stdev = []
-for owner in range(10):
-  url = 'http://games.espn.com/ffl/schedule?leagueId=%i&teamId=%i' % (league,owner+1)
-  soup = BeautifulSoup(requests.get(url).text,features="lxml")
-  rows = soup.select('table.tableBody')[0].select('tr')[2:15]
-  gp = 0
-  for week, row in enumerate(rows):
-    result = row.find_all('a', href=True)[0].text
-    opp = int(row.find_all('a', href=True)[1]['href'].split('teamId=')[1][0:2].replace('&',''))
-    sched[week] += [opp,]
-    if result[0] == 'W':
-      wins[owner] += [1.,]
-      scores[owner] += [float(result[2:result.find('-')])]
-      gp += 1
-    elif result[0] == 'L':
-      wins[owner] += [0.,]
-      scores[owner] += [float(result[2:result.find('-')])]
-      gp += 1
-  avgs += [np.mean(scores[owner]),]
-  stdev += [np.std(scores[owner],ddof=1),]
-
+def lookup(s,d):
+  if s in aliases:
+    s = aliases[s]
+  try:
+    return d[s]
+  except KeyError:
+    return [0.,0.]
 
 #Get projected scores from internet
 positions = ['qb','rb','wr','te','k','d']
@@ -66,24 +44,41 @@ for position in positions:
 
   stats_dict[position] = p
 
-def lookup(s,d):
-  if s in aliases:
-    s = aliases[s]
-  try:
-    return d[s]
-  except KeyError:
-    return [0.,0.]
-
-#Get rosters of teams
+#Get results and rosters from ESPN
+sched = [[] for i in range(13)]
+scores = [[] for i in range(10)]
+wins = [[] for i in range(10)]
+avgs = []
+stdev = []
 rosters = []
 for owner in range(10):
-  url = 'http://games.espn.com/ffl/clubhouse?leagueId=%i&teamId=%i&seasonId=%i' % (league,owner+1,season)
+  url = 'http://games.espn.com/ffl/schedule?leagueId=%i&teamId=%i' % (leagueID,owner+1)
+  soup = BeautifulSoup(requests.get(url).text,features="lxml")
+  rows = soup.select('table.tableBody')[0].select('tr')[2:15]
+  gp = 0
+  for week, row in enumerate(rows):
+    result = row.find_all('a', href=True)[0].text
+    opp = int(row.find_all('a', href=True)[1]['href'].split('teamId=')[1][0:2].replace('&',''))
+    sched[week] += [opp,]
+    if result[0] == 'W':
+      wins[owner] += [1.,]
+      scores[owner] += [float(result[2:result.find('-')])]
+      gp += 1
+    elif result[0] == 'L':
+      wins[owner] += [0.,]
+      scores[owner] += [float(result[2:result.find('-')])]
+      gp += 1
+  avgs += [np.mean(scores[owner]),]
+  stdev += [np.std(scores[owner],ddof=1),]
+  url = 'http://games.espn.com/ffl/clubhouse?leagueId=%i&teamId=%i&seasonId=%i' % (leagueID,owner+1,season)
   soup = BeautifulSoup(requests.get(url).text,features="lxml")
   roster = [player.a.text for player in soup.find_all('td',{'class':'playertablePlayerName'})]
   positions = [i.find(text=True, recursive=False).strip()[-2:].strip().lower() if i.find(text=True, recursive=False).strip()[-2:].strip().lower() != 'st' else 'd' for i in soup.find_all('td',{'class':'playertablePlayerName'})]
-  for idx, player in enumerate(roster):
-    stat = lookup(player,stats_dict[positions[idx]])
-    roster[idx] = [player,positions[idx],stat[0],stat[1]]
+  teams = [i.find(text=True, recursive=False).strip().split(',')[-1].strip().split('\xa0')[0] for i in soup.find_all('td',{'class':'playertablePlayerName'})]
+  dst_indices = [i for i, team in enumerate(teams) if team == "D/ST" ]
+  teams = [abbrevs[roster[i].split(' ')[0]] if i in dst_indices else team for i, team in enumerate(teams)]
+  byes = [bye_weeks[team] for team in teams]
+  for idx, (player, position, team, bye,) in enumerate(zip(roster, positions, teams, byes)):
+    stat = lookup(player,stats_dict[position])
+    roster[idx] = [player,position,team,stat[0],stat[1],bye]
   rosters += [roster,]
-
-print(rosters)
