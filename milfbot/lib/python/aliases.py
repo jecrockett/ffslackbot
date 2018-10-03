@@ -1,6 +1,3 @@
-league = 325879
-season = 2018
-
 aliases = {
   'Odell Beckham Jr.': 'Odell Beckham',
   'DJ Moore': 'D.J. Moore',
