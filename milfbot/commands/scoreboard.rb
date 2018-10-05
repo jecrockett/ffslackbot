@@ -5,7 +5,7 @@ module Milfbot
         helper = Milfbot::CommandHelpers::HelperBase.new
         owner = helper.matched_owner_name(name)
         team_id = Constants::ESPN_TEAM_IDS_BY_OWNER[owner]
-        url = "http://games.espn.com/ffl/scoreboard?leagueId=#{Constants::ESPN_LEAGUE_ID}&seasonId=2018"
+        url = "http://games.espn.com/ffl/scoreboard?leagueId=#{Constants::ESPN_LEAGUE_ID}&seasonId=#{Constants::ESPN_LEAGUE_YEAR}"
         page = Nokogiri::HTML(HTTParty.get(url))
 
         matchups = page.css('.matchup')
