@@ -29,7 +29,7 @@ module Milfbot
         helper = Milfbot::CommandHelpers::HelperBase.new
         owner = helper.matched_owner_name(name)
         team_id = Constants::ESPN_TEAM_IDS_BY_OWNER[owner]
-        url = "http://games.espn.com/ffl/boxscorequick?leagueId=#{Constants::ESPN_LEAGUE_ID}&teamId=#{team_id}&seasonId=2018"
+        url = "http://games.espn.com/ffl/boxscorequick?leagueId=#{Constants::ESPN_LEAGUE_ID}&teamId=#{team_id}&seasonId=#{Constants::ESPN_LEAGUE_YEAR}"
         page = Nokogiri::HTML(HTTParty.get(url))
 
         team1_projected = page.css('.games-alert-mod').first.css('span')[-1].text
